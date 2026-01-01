@@ -58,16 +58,9 @@ export default function ContactSection() {
     if (!validate()) return;
 
     const to = prisma.contact.toEmail.trim();
-    if (to && isEmail(to)) {
-      setMailtoHref(buildMailto({ to, subject, body }));
-    } else {
-      setMailtoHref(null);
-    }
-
+    setMailtoHref(buildMailto({ to, subject, body }));
     setToastOpen(true);
   }
-
-  const missingToEmail = !prisma.contact.toEmail.trim() || !isEmail(prisma.contact.toEmail.trim());
 
   return (
     <section id="contact" className="py-14 sm:py-16">
@@ -81,13 +74,6 @@ export default function ContactSection() {
               <p className="mt-4 max-w-2xl text-pretty text-sm font-semibold leading-7 text-slate-600 sm:text-base">
                 {prisma.contact.body[lang]}
               </p>
-
-              {missingToEmail ? (
-                <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-xs font-black text-slate-600">
-                  <span className="text-slate-900">TODO:</span> Agregar el correo destino en{" "}
-                  <span className="font-black">/content/prisma.ts → contact.toEmail</span>.
-                </div>
-              ) : null}
             </div>
 
             <div className="relative">
@@ -154,13 +140,7 @@ export default function ContactSection() {
                     <ButtonLink href={mailtoHref} variant="secondary" className="justify-center">
                       {labels.mailtoCta[lang]}
                     </ButtonLink>
-                  ) : (
-                    <div className="text-xs font-black text-slate-500">
-                      {lang === "es"
-                        ? "El PDF no incluye correo destino. Agrega contact.toEmail para habilitar mailto."
-                        : "The PDF does not include a destination email. Add contact.toEmail to enable mailto."}
-                    </div>
-                  )}
+                  ) : null}
                 </div>
               </form>
             </div>
