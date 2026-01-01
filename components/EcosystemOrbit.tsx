@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import Container from "@/components/ui/Container";
 import Card from "@/components/ui/Card";
@@ -7,7 +8,6 @@ import { prisma, type PrismaService } from "@/content/prisma";
 import { useLanguage } from "@/components/i18n/useLanguage";
 import { Film, Gamepad2, Headphones, Layers3, PlayCircle, Radio, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useEffect, useMemo, useRef, useState } from "react";
 
 const ICONS = {
   sport: Trophy,
@@ -38,9 +38,8 @@ function CenterMark() {
 }
 
 /**
- * Orden y “layout” tipo la imagen:
- * Sport ↖, Play ↗, Production →, Studio ↘, Content ↓, Replay ↙, Connect ←
- * Usamos coords normalizadas ([-1..1]) para escalar según ancho del contenedor.
+ * Layout tipo “hub & spoke” como la referencia.
+ * coords normalizadas [-1..1] para escalar según el contenedor.
  */
 const POSN: Record<PrismaService["key"], { x: number; y: number }> = {
   "prisma-sport": { x: -0.78, y: -0.58 },
@@ -75,7 +74,6 @@ export default function EcosystemOrbit() {
   }, []);
 
   const dims = useMemo(() => {
-    // Ancho útil para distribuir tarjetas SIN que se salgan
     const usable = clamp(w || 980, 820, 1100);
     const radiusX = clamp(usable * 0.36, 240, 340);
     const radiusY = clamp(usable * 0.30, 200, 300);
@@ -86,10 +84,10 @@ export default function EcosystemOrbit() {
   return (
     <section className="py-14 sm:py-16">
       <Container>
-        {/* OJO: overflow-visible para que NO se recorten tarjetas */}
-        <Card className="relative p-6 sm:p-10 overflow-visible">
-          {/* Background clipped inside */}
-          <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden">
+        {/* clave: overflow-visible para NO recortar las cards */}
+        <Card className="relative overflow-visible p-6 sm:p-10">
+          {/* Background CLIP solo dentro del card */}
+          <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl">
             <div
               className="absolute inset-0"
               style={{
@@ -114,19 +112,11 @@ export default function EcosystemOrbit() {
                   <stop offset="1" stopColor="rgb(14 165 233)" stopOpacity="0.40" />
                 </linearGradient>
               </defs>
-              {/* center at (500,280) */}
               {items.map((s) => {
                 const p = POSN[s.key];
                 const x2 = 500 + p.x * (dims.radiusX * 0.86);
                 const y2 = 280 + p.y * (dims.radiusY * 0.86);
-                return (
-                  <path
-                    key={s.key}
-                    d={`M500 280 L ${x2} ${y2}`}
-                    stroke="url(#link)"
-                    strokeWidth="1.2"
-                  />
-                );
+                return <path key={s.key} d={`M500 280 L ${x2} ${y2}`} stroke="url(#link)" strokeWidth="1.2" />;
               })}
             </svg>
 
@@ -145,15 +135,19 @@ export default function EcosystemOrbit() {
               const p = POSN[s.key];
               const Icon = ICONS[s.iconHint];
 
-              const x = p.x * dims.radiusX;
-              const y = p.y * dims.radiusY;
+              const baseX = p.x * dims.radiusX;
+              const baseY = p.y * dims.radiusY;
 
               return (
                 <motion.div
                   key={s.key}
-                  className="absolute left-1/2 top-1/2"
-                  style={{ transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))` }}
-                  animate={reduce ? {} : { y: [0, -7, 0] }}
+                  className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2"
+                  style={{ x: baseX, y: baseY }}  // ✅ NO transform string
+                  animate={
+                    reduce
+                      ? { y: baseY }
+                      : { y: [baseY, baseY - 7, baseY] } // ✅ float sin romper posición
+                  }
                   transition={{ duration: 4 + (idx % 3), repeat: Infinity, ease: "easeInOut" }}
                 >
                   <div
