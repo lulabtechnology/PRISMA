@@ -203,8 +203,7 @@ export const prisma = {
       en:
         "Ready to take your broadcast to the next level? Our team of experts is waiting to design the perfect solution for your project."
     },
-    // El PDF NO trae email destino -> se deja vacío y la UI muestra TODO.
-    toEmail: "",
+    toEmail: "Pablo.bravo@prismabm.com",
     form: {
       name: { es: "Nombre", en: "Name" },
       email: { es: "Correo", en: "Email" },
