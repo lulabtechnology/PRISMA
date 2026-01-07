@@ -61,14 +61,30 @@ export default function Hero() {
           className="relative"
         >
           <Card className="relative overflow-hidden p-6">
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "radial-gradient(900px circle at 30% 30%, rgba(37,99,235,0.20), rgba(14,165,233,0.10), rgba(255,255,255,0.0))"
-              }}
-            />
-            <div className="absolute inset-0 opacity-[0.28] bg-grid" />
+            {/* BG image for the entire panel */}
+            <div className="pointer-events-none absolute inset-0">
+              <Image
+                src="/images/hero/panel-bg.jpg"
+                alt=""
+                fill
+                sizes="(max-width: 1024px) 100vw, 560px"
+                className="object-cover opacity-[0.22]"
+                priority={false}
+              />
+              {/* Tech glow */}
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "radial-gradient(900px circle at 25% 25%, rgba(37,99,235,0.26), rgba(14,165,233,0.12), rgba(255,255,255,0.0))"
+                }}
+              />
+              {/* Keep readability */}
+              <div className="absolute inset-0 bg-white/65 backdrop-blur-[1px]" />
+            </div>
+
+            {/* Existing grid overlay */}
+            <div className="pointer-events-none absolute inset-0 opacity-[0.22] bg-grid" />
 
             <div className="relative flex items-start justify-between gap-6">
               <div>
@@ -111,7 +127,9 @@ export default function Hero() {
 
             <div
               className="pointer-events-none absolute left-0 top-0 h-20 w-full opacity-40"
-              style={{ background: "linear-gradient(180deg, rgba(37,99,235,0.18), rgba(255,255,255,0))" }}
+              style={{
+                background: "linear-gradient(180deg, rgba(37,99,235,0.18), rgba(255,255,255,0))"
+              }}
             />
           </Card>
         </motion.div>
