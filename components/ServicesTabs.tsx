@@ -7,7 +7,6 @@ import Container from "@/components/ui/Container";
 import Card from "@/components/ui/Card";
 import { prisma, type PrismaService } from "@/content/prisma";
 import { useLanguage } from "@/components/i18n/useLanguage";
-import { deriveBullets } from "@/lib/deriveBullets";
 import { cn } from "@/lib/utils";
 import { Film, Gamepad2, Headphones, Layers3, PlayCircle, Radio, Trophy } from "lucide-react";
 
@@ -31,7 +30,6 @@ export default function ServicesTabs() {
   const [active, setActive] = useState(items[0].key);
 
   const current = useMemo(() => items.find(s => s.key === active)!, [items, active]);
-  const bullets = useMemo(() => deriveBullets(current.description[lang], 3), [current, lang]);
 
   const btnRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
@@ -74,11 +72,15 @@ export default function ServicesTabs() {
         </div>
 
         <div className="mt-8 grid gap-4 lg:grid-cols-[1fr_2fr]">
+          {/* Tabs list */}
           <Card className="p-3">
             <div
               role="tablist"
               aria-label="Services tabs"
-              className="flex flex-col gap-1"
+              className={cn(
+                "flex gap-2 overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch]",
+                "md:flex-col md:gap-1 md:overflow-visible md:pb-0"
+              )}
               onKeyDown={onKeyDown}
             >
               {items.map((s, i) => {
@@ -93,15 +95,18 @@ export default function ServicesTabs() {
                     id={`tab-${s.key}`}
                     onClick={() => setActive(s.key)}
                     className={cn(
-                      "flex items-center justify-between rounded-xl px-3 py-3 text-left text-sm font-extrabold transition",
-                      "focus:outline-none focus:ring-2 focus:ring-blue-500/40",
+                      "shrink-0 whitespace-nowrap transition focus:outline-none focus:ring-2 focus:ring-blue-500/40",
+                      // Mobile: chip horizontal solo nombre
+                      "rounded-full px-4 py-2 text-xs font-extrabold",
+                      // Desktop: bloque con icono
+                      "md:flex md:items-center md:justify-between md:rounded-xl md:px-3 md:py-3 md:text-sm",
                       selected ? "bg-slate-900 text-white shadow-glow" : "text-slate-800 hover:bg-slate-100/70"
                     )}
                   >
                     <span className="flex items-center gap-2">
                       <span
                         className={cn(
-                          "grid h-7 w-7 place-items-center rounded-lg",
+                          "hidden md:grid md:h-7 md:w-7 md:place-items-center md:rounded-lg",
                           selected ? "bg-white/12" : "bg-blue-50 border border-blue-100"
                         )}
                       >
@@ -111,7 +116,8 @@ export default function ServicesTabs() {
                       </span>
                       {s.name}
                     </span>
-                    <span className={cn("text-xs font-black", selected ? "text-white/80" : "text-slate-400")}>
+
+                    <span className={cn("hidden md:inline text-xs font-black", selected ? "text-white/80" : "text-slate-400")}>
                       →
                     </span>
                   </button>
@@ -120,6 +126,7 @@ export default function ServicesTabs() {
             </div>
           </Card>
 
+          {/* Panel */}
           <Card className="p-5 sm:p-6">
             <AnimatePresence mode="wait">
               <motion.div
@@ -146,17 +153,6 @@ export default function ServicesTabs() {
                   <p className="mt-3 text-pretty text-sm font-semibold leading-7 text-slate-600 sm:text-base">
                     {current.description[lang]}
                   </p>
-
-                  <div className="mt-5 grid gap-2 sm:grid-cols-3">
-                    {bullets.map((b, i) => (
-                      <div
-                        key={i}
-                        className="rounded-xl border border-slate-200 bg-white/70 px-3 py-2 text-xs font-black text-slate-700 shadow-soft"
-                      >
-                        {b}
-                      </div>
-                    ))}
-                  </div>
                 </div>
 
                 <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-soft">
