@@ -49,14 +49,14 @@ export const prisma = {
     title: { es: "Innovación y Experiencia.", en: "Innovation and Experience." },
     body: {
       es:
-        "En Prisma Broadcast & Media, combinamos lo mejor de dos mundos. Somos una empresa joven, ágil y dinámica, nacida para responder a las exigencias modernas de la industria del Broadcast & Media. Sin embargo, nuestra base es sólida: estamos formados por un equipo de profesionales con décadas de experiencia en la industria del broadcast internacional. Entendemos el pasado de la televisión, pero estamos construyendo el futuro del streaming y la gestión deportiva.",
+        "En Prisma Broadcast & Media combinamos lo mejor de dos mundos: la solidez de décadas de experiencia en broadcast internacional y la innovación tecnológica que define la nueva era del contenido audiovisual. Somos una empresa ágil y dinámica, creada para responder a las exigencias actuales del mercado, respaldada por un equipo de profesionales que ha vivido la evolución de la televisión desde sus cimientos. Conocemos el pasado del broadcast, y aplicamos esa experiencia para construir el futuro de los medios y la gestión deportiva, apoyados en tecnología, eficiencia y visión estratégica.",
       en:
-        "At Prisma Broadcast & Media, we combine the best of both worlds. We are a young, agile, and dynamic company born to meet the modern demands of the Broadcast & Media industry. Yet, our foundation is rock-solid: we are powered by a team of professionals with decades of experience in the international broadcast industry. We understand the history of television, but we are engineering the future of streaming and sports management."
+        "At Prisma Broadcast & Media, we combine the best of two worlds: the strength of decades of international broadcast experience and the technological innovation shaping the new era of audiovisual content. We are an agile and dynamic company, created to meet the demands of today’s market, supported by a team of professionals who have lived and led the evolution of television from its foundations. We understand the legacy of broadcast, and we apply that knowledge to build the future of media and sports management, driven by technology, efficiency, and strategic vision."
     }
   },
 
   services: {
-    sectionTitle: { es: "Las 7 Pestañas de Servicios", en: "Services Tabs" },
+    sectionTitle: { es: "Nuestros servicios", en: "Our services" },
     sectionBody: { es: "", en: "" },
     items: [
       {
@@ -65,9 +65,9 @@ export const prisma = {
         focus: { es: "Gestión Visual Deportiva", en: "Visual Sports Management" },
         description: {
           es:
-            "Potenciamos el rendimiento y la estrategia. Ofrecemos herramientas integrales de gestión para clubes y federaciones, optimizando desde la táctica hasta la administración de recursos deportivos.",
+            "Transformamos la gestión deportiva más allá del campo de juego. Brindamos soluciones de sports management para clubes, ligas y federaciones, enfocadas en gobernanza, estructura organizacional y eficiencia operativa, impulsando el desarrollo sostenible de las instituciones deportivas. Nuestra propuesta combina experiencia en entornos deportivos profesionales, visión estratégica y tecnología aplicada para apoyar la toma de decisiones y el crecimiento a largo plazo.",
           en:
-            "Empowering performance and strategy. We offer comprehensive management tools for clubs and federations, optimizing everything from on-field tactics to sports resource administration."
+            "We transform sports management beyond the field of play. We deliver sports management solutions for clubs, leagues, and federations, focused on governance, organizational structure, and operational efficiency, driving the sustainable development of sports institutions. Our approach combines experience in professional sports environments, strategic insight, and applied technology to support decision-making and long-term growth."
         },
         imageSrc: "/images/services/prisma-sport.jpg",
         imageAlt: {
@@ -141,9 +141,9 @@ export const prisma = {
         focus: { es: "Producción de Estudio y Medios", en: "Studio & Media Production" },
         description: {
           es:
-            "El escenario perfecto para su historia. Diseño y operación de estudios de televisión, sets virtuales y entornos de producción de medios para noticieros, programas de debate y contenido pre-grabado.",
+            "Donde las historias toman forma. Diseñamos y operamos estudios profesionales de broadcast para podcasts, corresponsalías y producción de medios, creando entornos controlados que potencian la narrativa, la credibilidad y la identidad visual de cada marca. Desde noticieros y programas de análisis hasta contenido pregrabado, ofrecemos espacios de producción sólidos, confiables y con alto estándar editorial.",
           en:
-            "The perfect stage for your story. Design and operation of TV studios, virtual sets, and media production environments for news broadcasts, talk shows, and pre-recorded content."
+            "Where stories take shape. We design and operate professional broadcast studios for podcasts, correspondent hubs, and media production, creating controlled environments that enhance storytelling, credibility, and visual identity. From news and talk shows to pre-recorded content, we deliver technically robust and editorially refined production spaces."
         },
         imageSrc: "/images/services/prisma-studio.jpg",
         imageAlt: {
@@ -160,9 +160,9 @@ export const prisma = {
         focus: { es: "Producción Deportiva / Cobertura en vivo", en: "Sports Production" },
         description: {
           es:
-            "Capturamos la emoción en vivo. Servicios completos de producción exterior (OB Vans), equipos de cámara y personal técnico especializado para la cobertura de eventos deportivos de cualquier magnitud.",
+            "La emoción del deporte, producida con inteligencia. Combinamos producción remota, equipos en campo y operación especializada para capturar la intensidad del deporte en vivo, optimizando recursos sin sacrificar calidad ni experiencia para la audiencia.",
           en:
-            "Capturing the emotion live. Full outside broadcast (OB) services, camera crews, and specialized technical staff for covering sports events of any magnitude."
+            "Sports emotions, produced with technology. We combine remote production (REMI), on-site capture, and specialized operations to deliver live sports coverage that maximizes efficiency without compromising quality or audience experience. Our approach blends technology, expert crews, and optimized workflows to bring live events to screen with reliability and broadcast standards."
         },
         imageSrc: "/images/services/prisma-production.jpg",
         imageAlt: {
