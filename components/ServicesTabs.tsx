@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import Container from "@/components/ui/Container";
@@ -28,8 +28,7 @@ export default function ServicesTabs() {
   const items = prisma.services.items;
 
   const [active, setActive] = useState(items[0].key);
-
-  const current = useMemo(() => items.find(s => s.key === active)!, [items, active]);
+  const current = useMemo(() => items.find((s) => s.key === active)!, [items, active]);
 
   const btnRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
@@ -37,12 +36,12 @@ export default function ServicesTabs() {
     btnRefs.current = btnRefs.current.slice(0, items.length);
   }, [items.length]);
 
-  function onKeyDown(e: React.KeyboardEvent) {
+  function onKeyDown(e: KeyboardEvent<HTMLDivElement>) {
     const keys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Home", "End"];
     if (!keys.includes(e.key)) return;
 
     e.preventDefault();
-    const idx = items.findIndex(x => x.key === active);
+    const idx = items.findIndex((x) => x.key === active);
     let next = idx;
 
     if (e.key === "ArrowUp" || e.key === "ArrowLeft") next = Math.max(0, idx - 1);
@@ -71,16 +70,14 @@ export default function ServicesTabs() {
           </div>
         </div>
 
-        <div className="mt-8 grid gap-4 lg:grid-cols-[1fr_2fr]">
-          {/* Tabs list */}
+        {/* Mantengo 2 columnas en desktop: lista izquierda, detalle derecha */}
+        <div className="mt-8 grid gap-4 lg:grid-cols-[420px_1fr]">
+          {/* Left list */}
           <Card className="p-3">
             <div
               role="tablist"
               aria-label="Services tabs"
-              className={cn(
-                "flex gap-2 overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch]",
-                "md:flex-col md:gap-1 md:overflow-visible md:pb-0"
-              )}
+              className="flex flex-col gap-2"
               onKeyDown={onKeyDown}
             >
               {items.map((s, i) => {
@@ -95,29 +92,29 @@ export default function ServicesTabs() {
                     id={`tab-${s.key}`}
                     onClick={() => setActive(s.key)}
                     className={cn(
-                      "shrink-0 whitespace-nowrap transition focus:outline-none focus:ring-2 focus:ring-blue-500/40",
-                      // Mobile: chip horizontal solo nombre
-                      "rounded-full px-4 py-2 text-xs font-extrabold",
-                      // Desktop: bloque con icono
-                      "md:flex md:items-center md:justify-between md:rounded-xl md:px-3 md:py-3 md:text-sm",
-                      selected ? "bg-slate-900 text-white shadow-glow" : "text-slate-800 hover:bg-slate-100/70"
+                      "flex items-center justify-between rounded-2xl px-4 py-4 text-left text-sm font-extrabold transition",
+                      "focus:outline-none focus:ring-2 focus:ring-blue-500/40",
+                      "border shadow-soft",
+                      selected
+                        ? "bg-slate-900 text-white border-slate-900 shadow-glow"
+                        : "bg-white/70 text-slate-900 border-slate-200 hover:bg-white"
                     )}
                   >
-                    <span className="flex items-center gap-2">
+                    <span className="flex items-center gap-3 min-w-0">
                       <span
                         className={cn(
-                          "hidden md:grid md:h-7 md:w-7 md:place-items-center md:rounded-lg",
-                          selected ? "bg-white/12" : "bg-blue-50 border border-blue-100"
+                          "grid h-10 w-10 shrink-0 place-items-center rounded-xl border",
+                          selected ? "border-white/15 bg-white/10" : "border-blue-100 bg-blue-50"
                         )}
                       >
                         <span className={cn(selected ? "text-white" : "text-blue-700")}>
                           {iconFor(s.iconHint)}
                         </span>
                       </span>
-                      {s.name}
+                      <span className="min-w-0 truncate">{s.name}</span>
                     </span>
 
-                    <span className={cn("hidden md:inline text-xs font-black", selected ? "text-white/80" : "text-slate-400")}>
+                    <span className={cn("text-lg font-black", selected ? "text-white/80" : "text-slate-400")}>
                       →
                     </span>
                   </button>
@@ -126,8 +123,8 @@ export default function ServicesTabs() {
             </div>
           </Card>
 
-          {/* Panel */}
-          <Card className="p-5 sm:p-6">
+          {/* Right detail: ✅ TEXTO ARRIBA + IMAGEN GRANDOTA ABAJO */}
+          <Card className="p-6 sm:p-8">
             <AnimatePresence mode="wait">
               <motion.div
                 key={current.key + lang}
@@ -137,41 +134,47 @@ export default function ServicesTabs() {
                 initial={{ opacity: 0, y: 10, filter: "blur(6px)" }}
                 animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                 exit={{ opacity: 0, y: 10, filter: "blur(6px)" }}
-                transition={{ duration: 0.25 }}
-                className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-center"
+                transition={{ duration: 0.22 }}
               >
+                {/* Texto arriba */}
                 <div>
-                  <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-black text-slate-700 shadow-soft">
+                  <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-4 py-2 text-xs font-black text-slate-700 shadow-soft">
                     <span className="h-2 w-2 rounded-full bg-blue-600" />
                     {current.focus[lang]}
                   </div>
 
-                  <h3 className="mt-4 text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl">
+                  <h3 className="mt-5 text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
                     {current.name}
                   </h3>
 
-                  <p className="mt-3 text-pretty text-sm font-semibold leading-7 text-slate-600 sm:text-base">
+                  <p className="mt-4 text-pretty text-base font-semibold leading-8 text-slate-600">
                     {current.description[lang]}
                   </p>
                 </div>
 
-                <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-soft">
+                {/* Imagen GRANDOTA abajo */}
+                <div className="mt-6 relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-soft">
                   <div
                     className="absolute inset-0"
                     style={{
                       background:
-                        "radial-gradient(800px circle at 30% 20%, rgba(37,99,235,0.20), rgba(14,165,233,0.08), rgba(255,255,255,0.0))"
+                        "radial-gradient(1100px circle at 30% 20%, rgba(37,99,235,0.14), rgba(14,165,233,0.06), rgba(255,255,255,0.0))"
                     }}
                   />
-                  <Image
-                    src={current.imageSrc}
-                    alt={current.imageAlt[lang]}
-                    width={900}
-                    height={700}
-                    className="relative h-[260px] w-full object-cover sm:h-[320px]"
-                    priority={active === items[0].key}
-                  />
+
+                  {/* Controla el tamaño aquí (más grande en desktop) */}
+                  <div className="relative w-full aspect-[16/9] sm:aspect-[21/9] lg:aspect-[2.35/1]">
+                    <Image
+                      src={current.imageSrc}
+                      alt={current.imageAlt[lang]}
+                      fill
+                      sizes="(min-width: 1024px) 900px, 100vw"
+                      className="object-cover"
+                      priority={active === items[0].key}
+                    />
+                  </div>
                 </div>
+
               </motion.div>
             </AnimatePresence>
           </Card>
