@@ -13,20 +13,13 @@ import { Film, Gamepad2, Headphones, Layers3, PlayCircle, Radio, Trophy } from "
 function iconFor(hint: PrismaService["iconHint"]) {
   const props = { className: "h-4 w-4" };
   switch (hint) {
-    case "sport":
-      return <Trophy {...props} />;
-    case "connect":
-      return <Radio {...props} />;
-    case "replay":
-      return <PlayCircle {...props} />;
-    case "content":
-      return <Layers3 {...props} />;
-    case "studio":
-      return <Headphones {...props} />;
-    case "production":
-      return <Film {...props} />;
-    case "play":
-      return <Gamepad2 {...props} />;
+    case "sport": return <Trophy {...props} />;
+    case "connect": return <Radio {...props} />;
+    case "replay": return <PlayCircle {...props} />;
+    case "content": return <Layers3 {...props} />;
+    case "studio": return <Headphones {...props} />;
+    case "production": return <Film {...props} />;
+    case "play": return <Gamepad2 {...props} />;
   }
 }
 
@@ -77,6 +70,7 @@ export default function ServicesTabs() {
           </div>
         </div>
 
+        {/* Mantengo 2 columnas en desktop: lista izquierda, detalle derecha */}
         <div className="mt-8 grid gap-4 lg:grid-cols-[420px_1fr]">
           {/* Left list */}
           <Card className="p-3">
@@ -91,9 +85,7 @@ export default function ServicesTabs() {
                 return (
                   <button
                     key={s.key}
-                    ref={(el) => {
-                      btnRefs.current[i] = el;
-                    }}
+                    ref={(el) => { btnRefs.current[i] = el; }}
                     role="tab"
                     aria-selected={selected}
                     aria-controls={`panel-${s.key}`}
@@ -115,19 +107,23 @@ export default function ServicesTabs() {
                           selected ? "border-white/15 bg-white/10" : "border-blue-100 bg-blue-50"
                         )}
                       >
-                        <span className={cn(selected ? "text-white" : "text-blue-700")}>{iconFor(s.iconHint)}</span>
+                        <span className={cn(selected ? "text-white" : "text-blue-700")}>
+                          {iconFor(s.iconHint)}
+                        </span>
                       </span>
                       <span className="min-w-0 truncate">{s.name}</span>
                     </span>
 
-                    <span className={cn("text-lg font-black", selected ? "text-white/80" : "text-slate-400")}>→</span>
+                    <span className={cn("text-lg font-black", selected ? "text-white/80" : "text-slate-400")}>
+                      →
+                    </span>
                   </button>
                 );
               })}
             </div>
           </Card>
 
-          {/* Right detail */}
+          {/* Right detail: ✅ TEXTO ARRIBA + IMAGEN GRANDOTA ABAJO */}
           <Card className="p-6 sm:p-8">
             <AnimatePresence mode="wait">
               <motion.div
@@ -138,9 +134,9 @@ export default function ServicesTabs() {
                 initial={{ opacity: 0, y: 10, filter: "blur(6px)" }}
                 animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                 exit={{ opacity: 0, y: 10, filter: "blur(6px)" }}
-                transition={{ duration: 0.25 }}
-                className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-start"
+                transition={{ duration: 0.22 }}
               >
+                {/* Texto arriba */}
                 <div>
                   <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-4 py-2 text-xs font-black text-slate-700 shadow-soft">
                     <span className="h-2 w-2 rounded-full bg-blue-600" />
@@ -156,25 +152,29 @@ export default function ServicesTabs() {
                   </p>
                 </div>
 
-                {/* ✅ Imagen SIN recorte feo (desktop) */}
-                <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-soft">
+                {/* Imagen GRANDOTA abajo */}
+                <div className="mt-6 relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-soft">
                   <div
                     className="absolute inset-0"
                     style={{
                       background:
-                        "radial-gradient(900px circle at 30% 20%, rgba(37,99,235,0.14), rgba(14,165,233,0.06), rgba(255,255,255,0.0))"
+                        "radial-gradient(1100px circle at 30% 20%, rgba(37,99,235,0.14), rgba(14,165,233,0.06), rgba(255,255,255,0.0))"
                     }}
                   />
-                  <Image
-                    src={current.imageSrc}
-                    alt={current.imageAlt[lang]}
-                    width={1400}
-                    height={900}
-                    sizes="(min-width: 1024px) 420px, 100vw"
-                    className="relative h-auto w-full object-contain"
-                    priority={active === items[0].key}
-                  />
+
+                  {/* Controla el tamaño aquí (más grande en desktop) */}
+                  <div className="relative w-full aspect-[16/9] sm:aspect-[21/9] lg:aspect-[2.35/1]">
+                    <Image
+                      src={current.imageSrc}
+                      alt={current.imageAlt[lang]}
+                      fill
+                      sizes="(min-width: 1024px) 900px, 100vw"
+                      className="object-cover"
+                      priority={active === items[0].key}
+                    />
+                  </div>
                 </div>
+
               </motion.div>
             </AnimatePresence>
           </Card>
