@@ -1,26 +1,32 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import Container from "@/components/ui/Container";
 import Card from "@/components/ui/Card";
 import { prisma, type PrismaService } from "@/content/prisma";
 import { useLanguage } from "@/components/i18n/useLanguage";
-import { deriveBullets } from "@/lib/deriveBullets";
 import { cn } from "@/lib/utils";
 import { Film, Gamepad2, Headphones, Layers3, PlayCircle, Radio, Trophy } from "lucide-react";
 
 function iconFor(hint: PrismaService["iconHint"]) {
   const props = { className: "h-4 w-4" };
   switch (hint) {
-    case "sport": return <Trophy {...props} />;
-    case "connect": return <Radio {...props} />;
-    case "replay": return <PlayCircle {...props} />;
-    case "content": return <Layers3 {...props} />;
-    case "studio": return <Headphones {...props} />;
-    case "production": return <Film {...props} />;
-    case "play": return <Gamepad2 {...props} />;
+    case "sport":
+      return <Trophy {...props} />;
+    case "connect":
+      return <Radio {...props} />;
+    case "replay":
+      return <PlayCircle {...props} />;
+    case "content":
+      return <Layers3 {...props} />;
+    case "studio":
+      return <Headphones {...props} />;
+    case "production":
+      return <Film {...props} />;
+    case "play":
+      return <Gamepad2 {...props} />;
   }
 }
 
@@ -29,9 +35,7 @@ export default function ServicesTabs() {
   const items = prisma.services.items;
 
   const [active, setActive] = useState(items[0].key);
-
   const current = useMemo(() => items.find((s) => s.key === active)!, [items, active]);
-  const bullets = useMemo(() => deriveBullets(current.description[lang], 3), [current, lang]);
 
   const btnRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
@@ -39,7 +43,7 @@ export default function ServicesTabs() {
     btnRefs.current = btnRefs.current.slice(0, items.length);
   }, [items.length]);
 
-  function onKeyDown(e: React.KeyboardEvent) {
+  function onKeyDown(e: KeyboardEvent<HTMLDivElement>) {
     const keys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Home", "End"];
     if (!keys.includes(e.key)) return;
 
@@ -73,12 +77,13 @@ export default function ServicesTabs() {
           </div>
         </div>
 
-        <div className="mt-8 grid gap-4 lg:grid-cols-[1fr_2fr]">
+        <div className="mt-8 grid gap-4 lg:grid-cols-[420px_1fr]">
+          {/* Left list */}
           <Card className="p-3">
             <div
               role="tablist"
               aria-label="Services tabs"
-              className="flex flex-col gap-1"
+              className="flex flex-col gap-2"
               onKeyDown={onKeyDown}
             >
               {items.map((s, i) => {
@@ -86,41 +91,44 @@ export default function ServicesTabs() {
                 return (
                   <button
                     key={s.key}
-                    ref={(el) => { btnRefs.current[i] = el; }}
+                    ref={(el) => {
+                      btnRefs.current[i] = el;
+                    }}
                     role="tab"
                     aria-selected={selected}
                     aria-controls={`panel-${s.key}`}
                     id={`tab-${s.key}`}
                     onClick={() => setActive(s.key)}
                     className={cn(
-                      "flex items-center justify-between rounded-xl px-3 py-3 text-left text-sm font-extrabold transition",
+                      "flex items-center justify-between rounded-2xl px-4 py-4 text-left text-sm font-extrabold transition",
                       "focus:outline-none focus:ring-2 focus:ring-blue-500/40",
-                      selected ? "bg-slate-900 text-white shadow-glow" : "text-slate-800 hover:bg-slate-100/70"
+                      "border shadow-soft",
+                      selected
+                        ? "bg-slate-900 text-white border-slate-900 shadow-glow"
+                        : "bg-white/70 text-slate-900 border-slate-200 hover:bg-white"
                     )}
                   >
-                    <span className="flex items-center gap-2">
+                    <span className="flex items-center gap-3 min-w-0">
                       <span
                         className={cn(
-                          "grid h-7 w-7 place-items-center rounded-lg",
-                          selected ? "bg-white/12" : "bg-blue-50 border border-blue-100"
+                          "grid h-10 w-10 shrink-0 place-items-center rounded-xl border",
+                          selected ? "border-white/15 bg-white/10" : "border-blue-100 bg-blue-50"
                         )}
                       >
-                        <span className={cn(selected ? "text-white" : "text-blue-700")}>
-                          {iconFor(s.iconHint)}
-                        </span>
+                        <span className={cn(selected ? "text-white" : "text-blue-700")}>{iconFor(s.iconHint)}</span>
                       </span>
-                      {s.name}
+                      <span className="min-w-0 truncate">{s.name}</span>
                     </span>
-                    <span className={cn("text-xs font-black", selected ? "text-white/80" : "text-slate-400")}>
-                      →
-                    </span>
+
+                    <span className={cn("text-lg font-black", selected ? "text-white/80" : "text-slate-400")}>→</span>
                   </button>
                 );
               })}
             </div>
           </Card>
 
-          <Card className="p-5 sm:p-6">
+          {/* Right detail */}
+          <Card className="p-6 sm:p-8">
             <AnimatePresence mode="wait">
               <motion.div
                 key={current.key + lang}
@@ -131,52 +139,39 @@ export default function ServicesTabs() {
                 animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                 exit={{ opacity: 0, y: 10, filter: "blur(6px)" }}
                 transition={{ duration: 0.25 }}
-                className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-center"
+                className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-start"
               >
                 <div>
-                  <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-black text-slate-700 shadow-soft">
+                  <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-4 py-2 text-xs font-black text-slate-700 shadow-soft">
                     <span className="h-2 w-2 rounded-full bg-blue-600" />
                     {current.focus[lang]}
                   </div>
 
-                  <h3 className="mt-4 text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl">
+                  <h3 className="mt-5 text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
                     {current.name}
                   </h3>
 
-                  <p className="mt-3 text-pretty text-sm font-semibold leading-7 text-slate-600 sm:text-base">
+                  <p className="mt-4 text-pretty text-base font-semibold leading-8 text-slate-600">
                     {current.description[lang]}
                   </p>
-
-                  <div className="mt-5 grid gap-2 sm:grid-cols-3">
-                    {bullets.map((b, i) => (
-                      <div
-                        key={i}
-                        className="rounded-xl border border-slate-200 bg-white/70 px-3 py-2 text-xs font-black text-slate-700 shadow-soft"
-                      >
-                        {b}
-                      </div>
-                    ))}
-                  </div>
                 </div>
 
-                {/* IMAGE: FIX (no cropping on desktop) */}
+                {/* ✅ Imagen SIN recorte feo (desktop) */}
                 <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-soft">
                   <div
                     className="absolute inset-0"
                     style={{
                       background:
-                        "radial-gradient(800px circle at 30% 20%, rgba(37,99,235,0.18), rgba(14,165,233,0.08), rgba(255,255,255,0.0))"
+                        "radial-gradient(900px circle at 30% 20%, rgba(37,99,235,0.14), rgba(14,165,233,0.06), rgba(255,255,255,0.0))"
                     }}
                   />
-                  <div className="absolute inset-0 bg-white/35" />
-
                   <Image
                     src={current.imageSrc}
                     alt={current.imageAlt[lang]}
-                    width={1200}
-                    height={1200}
-                    sizes="(max-width: 1024px) 100vw, 520px"
-                    className="relative h-[280px] w-full object-contain p-4 sm:h-[340px] lg:h-[420px]"
+                    width={1400}
+                    height={900}
+                    sizes="(min-width: 1024px) 420px, 100vw"
+                    className="relative h-auto w-full object-contain"
                     priority={active === items[0].key}
                   />
                 </div>
