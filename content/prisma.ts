@@ -62,13 +62,17 @@ export const prisma = {
       {
         key: "prisma-sport",
         name: "Prisma Sport",
-        focus: { es: "Gestión Visual Deportiva", en: "Visual Sports Management" },
-        description: {
-          es:
-            "Transformamos la gestión deportiva más allá del campo de juego. Brindamos soluciones de sports management para clubes, ligas y federaciones, enfocadas en gobernanza, estructura organizacional y eficiencia operativa, impulsando el desarrollo sostenible de las instituciones deportivas. Nuestra propuesta combina experiencia en entornos deportivos profesionales, visión estratégica y tecnología aplicada para apoyar la toma de decisiones y el crecimiento a largo plazo.",
-          en:
-            "We transform sports management beyond the field of play. We deliver sports management solutions for clubs, leagues, and federations, focused on governance, organizational structure, and operational efficiency, driving the sustainable development of sports institutions. Our approach combines experience in professional sports environments, strategic insight, and applied technology to support decision-making and long-term growth."
-        },
+       focus: { 
+  es: "Licenciamiento de Medios y Contenido", 
+  en: "Media and content licensing" 
+},
+description: {
+  es:
+    "Transformamos la gestión deportiva más allá del campo de juego. Brindamos soluciones de sports management para clubes, ligas y federaciones, enfocadas en gobernanza, estructura organizacional y monetización de activos deportivos. Apoyamos a las organizaciones en la gestión, estructuración y comercialización de contenidos y propiedades deportivas, combinando experiencia en entornos profesionales, visión estratégica y tecnología para impulsar decisiones sólidas y crecimiento sostenible a largo plazo.",
+  en:
+    "We transform sports management beyond the field of play. We provide sports management solutions for clubs, leagues, and federations, focused on governance, organizational structure, and the monetization of sports assets. We support organizations in the management, structuring, and commercialization of sports content and properties, combining experience in professional environments, strategic vision, and technology to drive sound decisions and sustainable long-term growth."
+},
+
         imageSrc: "/images/services/prisma-sport.jpg",
         imageAlt: {
           es:
